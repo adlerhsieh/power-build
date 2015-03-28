@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["nkj20932@hotmail.com"]
   spec.summary       = %q{A simple photo album site generator.}
   spec.description   = %q{A site generator for hosting a photo album on github.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/nkj20932/power-build"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 0"
   spec.add_development_dependency "thor", "~> 0.19"
   spec.add_development_dependency "colorize", "~> 0"
 end

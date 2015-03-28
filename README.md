@@ -1,4 +1,4 @@
-# Power Build
+# Power Build (Under Development)
 
 Power Build is a photo album builder which generates a site based on the images in a project. It works as a command line application.
 
