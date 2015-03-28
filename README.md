@@ -1,29 +1,34 @@
-# Power::Build
+# Power Build
 
-TODO: Write a gem description
+Power Build is a photo album builder which generates a site based on the images in a project. It works as a command line application.
+
+## Requirement
+
+1. Ruby is installed in your Mac or Linux. (Don't use this application in Windows. Nothing has been tested.)
+2. The generated site is to be hosted on [GitHub pages](https://pages.github.com/).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Run:
 
-    gem 'power-build'
+```
+$gem install power-build
+```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install power-build
+or manually write `gem 'power-build'` in the Gemfile before you run `$bundle`.
 
 ## Usage
 
-TODO: Write usage instructions here
+In the root of your project, run:
 
-## Contributing
+```
+$power init
+```
 
-1. Fork it ( https://github.com/[my-github-username]/power-build/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+It creates a config file in your project directory. You can adjust the content depending on how you want to build your site, but don't change the file name.
+
+```
+$power build
+```
+
+You can skip the `build` and just run `power`. This command generates a static site which allows you to host on github pages. Basically it creates a `index.html` and a folder `album` with other pages in it.
