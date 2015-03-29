@@ -5,3 +5,4 @@ gemspec
 gem 'thor'
 gem 'colorize'
 gem 'rspec'
+gem 'pry'
