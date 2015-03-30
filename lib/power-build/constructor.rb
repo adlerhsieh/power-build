@@ -54,13 +54,21 @@ module PowerBuild
         end
       end
 
+      # content = String.new
+      
+
       variables = OpenStruct.new(title: config["title"],
                                  root_folder: root_dir,
                                  site: config["site"],
                                  image_collection: image_collection
                                 )
-      content = File.read File.expand_path("#{@base}/index.html.erb", __FILE__)
+      content = File.read(File.expand_path("#{@base}/_head.html.erb", __FILE__))
+      head = ERB.new(content).result(variables.instance_eval{binding})
+      variables.send :head=, head
+
+      content = File.read(File.expand_path("#{@base}/index.html.erb", __FILE__))
       rendered_erb = ERB.new(content).result(variables.instance_eval{binding})
+
       File.open("index.html", "w") {|file| file.write(rendered_erb)}
     end
 
