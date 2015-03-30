@@ -63,8 +63,13 @@ module PowerBuild
                                  image_collection: image_collection
                                 )
       content = File.read(File.expand_path("#{@base}/_head.html.erb", __FILE__))
-      head = ERB.new(content).result(variables.instance_eval{binding})
-      variables.send :head=, head
+      variables.send :head=, ERB.new(content).result(variables.instance_eval{binding})
+
+      content = File.read(File.expand_path("#{@base}/_navbar.html.erb", __FILE__))
+      variables.send :navbar=, ERB.new(content).result(variables.instance_eval{binding})
+
+      content = File.read(File.expand_path("#{@base}/_footer.html.erb", __FILE__))
+      variables.send :footer=, ERB.new(content).result(variables.instance_eval{binding}) 
 
       content = File.read(File.expand_path("#{@base}/index.html.erb", __FILE__))
       rendered_erb = ERB.new(content).result(variables.instance_eval{binding})
