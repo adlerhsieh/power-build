@@ -8,7 +8,8 @@ module PowerBuild
     map %w[b] => :build
     default_task :build
     def build 
-      Constructor.copy_assets
+      # Constructor.copy_assets
+      Constructor.render_index
     end
 
     desc "init, i", "Start with a config file. Continue with 'power build' if you have nothing to change."
