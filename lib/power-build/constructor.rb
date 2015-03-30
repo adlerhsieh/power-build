@@ -54,27 +54,15 @@ module PowerBuild
         end
       end
 
-      # content = String.new
-      
-
-      variables = OpenStruct.new(title: config["title"],
+      @variables = OpenStruct.new(title: config["title"],
                                  root_folder: root_dir,
                                  site: config["site"],
                                  image_collection: image_collection
                                 )
-      content = File.read(File.expand_path("#{@base}/_head.html.erb", __FILE__))
-      variables.send :head=, ERB.new(content).result(variables.instance_eval{binding})
-
-      content = File.read(File.expand_path("#{@base}/_navbar.html.erb", __FILE__))
-      variables.send :navbar=, ERB.new(content).result(variables.instance_eval{binding})
-
-      content = File.read(File.expand_path("#{@base}/_footer.html.erb", __FILE__))
-      variables.send :footer=, ERB.new(content).result(variables.instance_eval{binding}) 
-
-      content = File.read(File.expand_path("#{@base}/index.html.erb", __FILE__))
-      rendered_erb = ERB.new(content).result(variables.instance_eval{binding})
-
-      File.open("index.html", "w") {|file| file.write(rendered_erb)}
+      add_partial("head")
+      add_partial("navbar")
+      add_partial("footer")
+      render_page("index")
     end
 
     def self.remove_config
@@ -102,6 +90,17 @@ module PowerBuild
 
     def self.read_config
       JSON.parse(File.read("power-build.config"))
+    end
+
+    def self.add_partial(partial)
+      content = File.read(File.expand_path("#{@base}/_#{partial}.html.erb", __FILE__))
+      @variables.send("#{partial}=".to_sym, ERB.new(content).result(@variables.instance_eval{binding}))
+    end
+
+    def self.render_page(page)
+      content = File.read(File.expand_path("#{@base}/#{page}.html.erb", __FILE__))
+      erb = ERB.new(content).result(@variables.instance_eval{binding})
+      File.open("#{page}.html", "w") {|file| file.write(erb)}
     end
   end
 end
