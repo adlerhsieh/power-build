@@ -8,7 +8,7 @@ module PowerBuild
     map %w[b] => :build
     default_task :build
     def build 
-      # Constructor.copy_assets
+      Constructor.copy_assets
       Constructor.render_index
     end
 

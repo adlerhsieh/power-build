@@ -31,7 +31,34 @@ module PowerBuild
     def self.render_index
       @base = "../../assets"
       config = read_config
-      variables = OpenStruct.new(title: config["title"])
+
+      image_collection = []
+      root_dir = config["root_folder"]
+      dirs = Dir.entries(root_dir)
+      dirs.delete(".")
+      dirs.delete("..")
+      dirs.each do |dir|
+        if File.directory? "#{root_dir}/#{dir}"
+          images = Dir.entries("#{root_dir}/#{dir}")
+          images.delete(".")
+          images.delete("..")
+          category = {:tag => dir, :images => []}
+          images.each do |image|
+            if File.file? "#{root_dir}/#{dir}/#{image}"
+              if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
+                category[:images].push(image)
+              end
+            end
+          end
+          image_collection.push(category)
+        end
+      end
+
+      variables = OpenStruct.new(title: config["title"],
+                                 root_folder: root_dir,
+                                 site: config["site"],
+                                 image_collection: image_collection
+                                )
       content = File.read File.expand_path("#{@base}/index.html.erb", __FILE__)
       rendered_erb = ERB.new(content).result(variables.instance_eval{binding})
       File.open("index.html", "w") {|file| file.write(rendered_erb)}
