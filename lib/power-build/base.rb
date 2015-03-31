@@ -10,6 +10,7 @@ module PowerBuild
     def build 
       Constructor.copy_assets
       Constructor.render_index
+      puts "Done!"
     end
 
     desc "init, i", "Start with a config file. Continue with 'power build' if you have nothing to change."

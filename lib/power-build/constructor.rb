@@ -59,22 +59,29 @@ module PowerBuild
       @variables = OpenStruct.new(title: config["title"],
                                   root_folder: root_dir,
                                   site: config["site"],
+                                  resource_prefix: "",
                                   image_collection: image_collection
                                  )
       add_partial("head")
       add_partial("navbar")
       add_partial("footer")
-      render_page("index")
 
+      render_page("index")
+      puts "Created: ".green + "index.html"
+
+      @variables.resource_prefix = "../../"
+      add_partial("head")
       image_collection.each do |category|
         dir = FileUtils.mkdir_p("collection/#{category[:tag]}").first
         category[:images].each do |image|
           @variables.current_image = "#{dir}/#{image}"
-          @variables.current_title = image.include?(".") ? image[0..-5] : image
-          @variables.title = current_title
+          @variables.current_image_source = "../../#{root_dir}/#{category[:tag]}/#{image}"
+          @variables.current_title = image
+          @variables.title = @variables.current_title
           content = File.read(File.expand_path("#{@base}/show.html.erb", __FILE__))
           erb = ERB.new(content).result(@variables.instance_eval{binding})
           File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
+          puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
         end
       end
     end
