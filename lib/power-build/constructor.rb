@@ -55,10 +55,10 @@ module PowerBuild
       end
 
       @variables = OpenStruct.new(title: config["title"],
-                                 root_folder: root_dir,
-                                 site: config["site"],
-                                 image_collection: image_collection
-                                )
+                                  root_folder: root_dir,
+                                  site: config["site"],
+                                  image_collection: image_collection
+                                 )
       add_partial("head")
       add_partial("navbar")
       add_partial("footer")
@@ -93,7 +93,7 @@ module PowerBuild
     end
 
     def self.add_partial(partial)
-      content = File.read(File.expand_path("#{@base}/_#{partial}.html.erb", __FILE__))
+      content = File.read(File.expand_path("#{@base}/partials/_#{partial}.html.erb", __FILE__))
       @variables.send("#{partial}=".to_sym, ERB.new(content).result(@variables.instance_eval{binding}))
     end
 
