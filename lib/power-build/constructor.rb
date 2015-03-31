@@ -71,7 +71,7 @@ module PowerBuild
       image_collection.each do |category|
         dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
         @variables.current_category = category
-        content = File.read(File.expand_path("#{@base}/category.html.erb", __FILE__))
+        content = File.read(File.expand_path("#{@base}/templates/category.html.erb", __FILE__))
         erb = ERB.new(content).result(@variables.instance_eval{binding})
         File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
         puts "Created: ".green + "#{dir}/index.html"
@@ -80,7 +80,7 @@ module PowerBuild
           @variables.current_image_source = "../../#{root_dir}/#{category[:tag]}/#{image}"
           @variables.current_title = image
           @variables.title = @variables.current_title
-          content = File.read(File.expand_path("#{@base}/show.html.erb", __FILE__))
+          content = File.read(File.expand_path("#{@base}/templates/show.html.erb", __FILE__))
           erb = ERB.new(content).result(@variables.instance_eval{binding})
           File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
           puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
@@ -142,7 +142,7 @@ module PowerBuild
     end
 
     def self.render_page(page)
-      content = File.read(File.expand_path("#{@base}/#{page}.html.erb", __FILE__))
+      content = File.read(File.expand_path("#{@base}/templates/#{page}.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{page}.html", "w") {|file| file.write(erb)}
     end
