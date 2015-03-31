@@ -47,7 +47,7 @@ module PowerBuild
         content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
         erb = ERB.new(content).result(@variables.instance_eval{binding})
         File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
-        # puts "Created: ".green + "#{dir}/index.html"
+        puts "Created: ".green + "#{dir}/index.html"
         category[:images].each do |image|
           @variables.current_image = "#{dir}/#{image}"
           @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
@@ -56,7 +56,7 @@ module PowerBuild
           content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
           erb = ERB.new(content).result(@variables.instance_eval{binding})
           File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
-          # puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
+          puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
         end
       end
 
