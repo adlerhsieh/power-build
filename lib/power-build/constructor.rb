@@ -28,14 +28,11 @@ module PowerBuild
       if File.directory? "assets"
         copy_assets_in_order
       else
-        ["css", "js", "fonts"].each {|dir| copy_assets_dir dir}
+        ["css", "js", "fonts"].each do |dir| 
+          copy_assets_dir dir
+          puts "Created: ".green + "assets/#{dir}"
+        end
       end
-      # copy_assets_dir "css"
-      # puts "Created: ".green + "assets/css"
-      # copy_assets_dir "js"
-      # puts "Created: ".green + "assets/js"
-      # copy_assets_dir "fonts"
-      # puts "Created: ".green + "assets/fonts"
     end
 
     def generate_site
@@ -50,7 +47,7 @@ module PowerBuild
         content = File.read(File.expand_path("#{@base}/templates/category.html.erb", __FILE__))
         erb = ERB.new(content).result(@variables.instance_eval{binding})
         File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
-        puts "Created: ".green + "#{dir}/index.html"
+        # puts "Created: ".green + "#{dir}/index.html"
         category[:images].each do |image|
           @variables.current_image = "#{dir}/#{image}"
           @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
@@ -59,7 +56,7 @@ module PowerBuild
           content = File.read(File.expand_path("#{@base}/templates/show.html.erb", __FILE__))
           erb = ERB.new(content).result(@variables.instance_eval{binding})
           File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
-          puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
+          # puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
         end
       end
 
@@ -79,7 +76,7 @@ module PowerBuild
       end
       if File.directory? "assets"
         FileUtils.rm_rf "assets"
-        puts "Removed:".red + " /assets"
+        puts "Removed:".red + " assets"
       end
       if File.file? "index.html"
         FileUtils.remove "index.html"

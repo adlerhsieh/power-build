@@ -49,8 +49,9 @@ module PowerBuild
       def in_power_build_project
         count = Dir.pwd.count("/") - 1
         for i in 0..count do
-          return true if File.file?("../" * i + "power-build.config")
+         @respond = true if File.file?("../" * i + "power-build.config")
         end
+        return @respond
       end
   end
 end
