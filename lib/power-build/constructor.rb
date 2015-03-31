@@ -64,6 +64,7 @@ module PowerBuild
                                   resource_prefix: "",
                                   image_collection: image_collection
                                  )
+      i18n(config["language"]).each {|key, value| @variables.send("#{key.to_s}=".to_sym, value) }
 
       @variables.resource_prefix = "../../"
       update_partials
@@ -148,6 +149,27 @@ module PowerBuild
       content = File.read(File.expand_path("#{@base}/#{page}.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{page}.html", "w") {|file| file.write(erb)}
+    end
+
+    def self.i18n(setting)
+      case setting
+      when "zh-tw"
+        {
+          i_header: "總覽",
+          i_category: "類別",
+          i_copyright: "版權所有",
+          i_download: "下載",
+          i_home: "首頁"
+        }
+      when "en"
+        {
+          i_header: "Overview",
+          i_category: "Categories",
+          i_copyright: "Copyright",
+          i_download: "Download",
+          i_home: "Home"
+        }
+      end
     end
   end
 end
