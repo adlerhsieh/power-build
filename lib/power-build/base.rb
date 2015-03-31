@@ -10,7 +10,7 @@ module PowerBuild
     def build 
       if File.file? "power-build.config"
         Constructor.copy_assets
-        Constructor.render_index
+        Constructor.generate_site
         puts "Done!"
       else
         puts "No config file found. Run 'power init' first."

@@ -30,7 +30,7 @@ module PowerBuild
       puts "Created: ".green + "/assets/fonts"
     end
 
-    def self.render_index
+    def self.generate_site
       @base = "../../assets"
       config = read_config
 

@@ -17,7 +17,12 @@
       <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle">Categories<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Inbox</a></li>
+          <!-- <li><a href="#">Inbox</a></li> -->
+          <% image_collection.each do |category| %>
+            <li>
+              <a href="<%= resource_prefix %>collection/<%= category[:tag] %>/index.html"><%= category[:tag] %></a>
+            </li>
+          <% end %>
         </ul>
       </li>
     </ul>
