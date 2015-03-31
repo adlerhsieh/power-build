@@ -7,7 +7,7 @@ module PowerBuild
   class Constructor
 
     def initialize(config=nil)
-      @base = "../../assets"
+      @assets_base = "../../assets"
       variables_set if config
     end
 
@@ -17,9 +17,9 @@ module PowerBuild
         puts "1. Run 'power build' to build."
         puts "2. Run 'power delete' to delete all."
       else
-        @base = "../../assets"
+        @assets_base = "../../assets"
         config = "power-build.config"
-        FileUtils.cp File.expand_path("#{@base}/power-build.config", __FILE__), config
+        FileUtils.cp File.expand_path("#{@assets_base}/power-build.config", __FILE__), config
         puts "Created: ".green + "power-build.config"
       end
     end
@@ -44,7 +44,7 @@ module PowerBuild
       image_collection.each do |category|
         dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
         @variables.current_category = category
-        content = File.read(File.expand_path("#{@base}/templates/category.html.erb", __FILE__))
+        content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
         erb = ERB.new(content).result(@variables.instance_eval{binding})
         File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
         # puts "Created: ".green + "#{dir}/index.html"
@@ -53,7 +53,7 @@ module PowerBuild
           @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
           @variables.current_title = image
           @variables.title = @variables.current_title
-          content = File.read(File.expand_path("#{@base}/templates/show.html.erb", __FILE__))
+          content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
           erb = ERB.new(content).result(@variables.instance_eval{binding})
           File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
           # puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
@@ -107,13 +107,24 @@ module PowerBuild
     end
 
     def copy_assets_dir(dir_name)
-      dir = File.expand_path("#{@base}/#{dir_name}", __FILE__)
+      dir = File.expand_path("#{@assets_base}/#{dir_name}", __FILE__)
       Dir.mkdir "assets" unless File.directory? "assets"
       FileUtils.copy_entry dir, "assets/#{dir_name}"
     end
 
     def copy_assets_in_order
-      
+      ["css", "js", "fonts"].each do |dir|
+        directory = File.expand_path("#{@assets_base}/#{dir}", __FILE__)
+        Dir.entries(directory).each do |entry|
+          next if [".", ".."].include? entry
+          if File.file? "assets/#{dir}/#{entry}"
+            puts "Skipped: assets/#{dir}/#{entry}"
+          else
+            FileUtils.copy "#{directory}/#{entry}", "assets/#{dir}/#{entry}"
+            puts "Created: ".green + "assets/#{dir}/#{entry}"
+          end
+        end
+      end
     end
 
     def read_config
@@ -138,13 +149,13 @@ module PowerBuild
     end
 
     def add_partial(partial)
-      content = File.read(File.expand_path("#{@base}/partials/_#{partial}.html.erb", __FILE__))
+      content = File.read(File.expand_path("#{@assets_base}/partials/_#{partial}.html.erb", __FILE__))
       rendered = ERB.new(content).result(@variables.instance_eval{binding})
       @variables.send("#{partial}=".to_sym, rendered)
     end
 
     def render_page(page)
-      content = File.read(File.expand_path("#{@base}/templates/#{page}.html.erb", __FILE__))
+      content = File.read(File.expand_path("#{@assets_base}/templates/#{page}.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{page}.html", "w") {|file| file.write(erb)}
     end
