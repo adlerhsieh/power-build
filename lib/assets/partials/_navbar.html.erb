@@ -20,7 +20,7 @@
           <!-- <li><a href="#">Inbox</a></li> -->
           <% image_collection.each do |category| %>
             <li>
-              <a href="<%= resource_prefix %>collection/<%= category[:tag] %>/index.html"><%= category[:tag] %></a>
+              <a href="<%= resource_prefix %>assets/<%= category[:tag] %>/index.html"><%= category[:tag] %></a>
             </li>
           <% end %>
         </ul>

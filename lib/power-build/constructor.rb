@@ -23,11 +23,11 @@ module PowerBuild
     def self.copy_assets
       @base = "../../assets"
       copy_assets_dir "css"
-      puts "Created: ".green + "/assets/css"
+      puts "Created: ".green + "assets/css"
       copy_assets_dir "js"
-      puts "Created: ".green + "/assets/js"
+      puts "Created: ".green + "assets/js"
       copy_assets_dir "fonts"
-      puts "Created: ".green + "/assets/fonts"
+      puts "Created: ".green + "assets/fonts"
     end
 
     def self.generate_site
@@ -69,7 +69,7 @@ module PowerBuild
       @variables.resource_prefix = "../../"
       update_partials
       image_collection.each do |category|
-        dir = FileUtils.mkdir_p("collection/#{category[:tag]}").first
+        dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
         @variables.current_category = category
         content = File.read(File.expand_path("#{@base}/category.html.erb", __FILE__))
         erb = ERB.new(content).result(@variables.instance_eval{binding})
@@ -108,10 +108,6 @@ module PowerBuild
       if File.file? "index.html"
         FileUtils.remove "index.html"
         puts "Removed:".red + " index.html"
-      end
-      if File.directory? "collection"
-        FileUtils.rm_rf "collection"
-        puts "Removed:".red + " /collection"
       end
     end
 
