@@ -7,7 +7,11 @@ require 'json'
 module PowerBuild
   class Constructor
 
-    def self.build_config
+    def initialize
+      @base = "../../assets"
+    end
+
+    def build_config
       if File.file? "power-build.config"
         puts "Config file already exists. Either:"
         puts "1. Run 'power build' to build."
@@ -20,8 +24,7 @@ module PowerBuild
       end
     end
 
-    def self.copy_assets
-      @base = "../../assets"
+    def copy_assets
       copy_assets_dir "css"
       puts "Created: ".green + "assets/css"
       copy_assets_dir "js"
@@ -30,8 +33,7 @@ module PowerBuild
       puts "Created: ".green + "assets/fonts"
     end
 
-    def self.generate_site
-      @base = "../../assets"
+    def generate_site
       config = read_config
 
       image_collection = []
@@ -94,7 +96,7 @@ module PowerBuild
       puts "Created: ".green + "index.html"
     end
 
-    def self.remove_config
+    def remove_config
       if File.file? "power-build.config"
         FileUtils.remove "power-build.config"
         puts "Removed:".red + " power-build.config"
@@ -111,7 +113,7 @@ module PowerBuild
       end
     end
 
-    def self.open_config
+    def open_config
       if File.file? "power-build.config"
         %x[open power-build.config]
       else
@@ -138,7 +140,8 @@ module PowerBuild
 
     def self.add_partial(partial)
       content = File.read(File.expand_path("#{@base}/partials/_#{partial}.html.erb", __FILE__))
-      @variables.send("#{partial}=".to_sym, ERB.new(content).result(@variables.instance_eval{binding}))
+      rendered = ERB.new(content).result(@variables.instance_eval{binding})
+      @variables.send("#{partial}=".to_sym, rendered)
     end
 
     def self.render_page(page)
