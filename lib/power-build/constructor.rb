@@ -64,9 +64,6 @@ module PowerBuild
                                   resource_prefix: "",
                                   image_collection: image_collection
                                  )
-      update_partials
-      render_page("index")
-      puts "Created: ".green + "index.html"
 
       @variables.resource_prefix = "../../"
       update_partials
@@ -83,6 +80,12 @@ module PowerBuild
           puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
         end
       end
+
+      @variables.title = config["title"]
+      @variables.resource_prefix = ""
+      update_partials
+      render_page("index")
+      puts "Created: ".green + "index.html"
     end
 
     def self.remove_config
