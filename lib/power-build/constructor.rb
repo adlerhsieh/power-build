@@ -23,9 +23,11 @@ module PowerBuild
     def self.copy_assets
       @base = "../../assets"
       copy_assets_dir "css"
+      puts "Created: ".green + "/assets/css"
       copy_assets_dir "js"
+      puts "Created: ".green + "/assets/js"
       copy_assets_dir "fonts"
-      puts "Created: ".green + "/assets"
+      puts "Created: ".green + "/assets/fonts"
     end
 
     def self.render_index
@@ -63,6 +65,18 @@ module PowerBuild
       add_partial("navbar")
       add_partial("footer")
       render_page("index")
+
+      image_collection.each do |category|
+        dir = FileUtils.mkdir_p("collection/#{category[:tag]}").first
+        category[:images].each do |image|
+          @variables.current_image = "#{dir}/#{image}"
+          @variables.current_title = image.include?(".") ? image[0..-5] : image
+          @variables.title = current_title
+          content = File.read(File.expand_path("#{@base}/show.html.erb", __FILE__))
+          erb = ERB.new(content).result(@variables.instance_eval{binding})
+          File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
+        end
+      end
     end
 
     def self.remove_config
