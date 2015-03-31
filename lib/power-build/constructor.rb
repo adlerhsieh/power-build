@@ -1,5 +1,4 @@
 require 'colorize'
-require 'pry'
 require 'erb'
 require 'ostruct'
 require 'json'
@@ -26,12 +25,17 @@ module PowerBuild
     end
 
     def copy_assets
-      copy_assets_dir "css"
-      puts "Created: ".green + "assets/css"
-      copy_assets_dir "js"
-      puts "Created: ".green + "assets/js"
-      copy_assets_dir "fonts"
-      puts "Created: ".green + "assets/fonts"
+      if File.directory? "assets"
+        copy_assets_in_order
+      else
+        ["css", "js", "fonts"].each {|dir| copy_assets_dir dir}
+      end
+      # copy_assets_dir "css"
+      # puts "Created: ".green + "assets/css"
+      # copy_assets_dir "js"
+      # puts "Created: ".green + "assets/js"
+      # copy_assets_dir "fonts"
+      # puts "Created: ".green + "assets/fonts"
     end
 
     def generate_site
@@ -111,8 +115,23 @@ module PowerBuild
       FileUtils.copy_entry dir, "assets/#{dir_name}"
     end
 
+    def copy_assets_in_order
+      
+    end
+
     def read_config
-      JSON.parse(File.read("power-build.config"))
+      begin
+        JSON.parse(File.read("power-build.config"))
+      rescue JSON::ParserError
+        puts "============================================================"
+        puts "Oops, make sure 'power-build.config' is in correct JSON format."
+        puts "1. Wrap the whole content in brackets {}"
+        puts "2. Wrap each key and value with quotes ''"
+        puts "3. Separate each setting with comma ,"
+        puts "If you can't fix it, run 'power delete' to start over again."
+        puts "============================================================"
+        raise JSON::ParserError
+      end
     end
 
     def update_partials
