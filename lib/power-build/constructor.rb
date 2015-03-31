@@ -7,8 +7,9 @@ require 'json'
 module PowerBuild
   class Constructor
 
-    def initialize
+    def initialize(config=nil)
       @base = "../../assets"
+      variables_set if config
     end
 
     def build_config
@@ -34,39 +35,8 @@ module PowerBuild
     end
 
     def generate_site
-      config = read_config
-
-      image_collection = []
-      root_dir = config["root_folder"]
-      dirs = Dir.entries(root_dir)
-      dirs.delete(".")
-      dirs.delete("..")
-      dirs.each do |dir|
-        if File.directory? "#{root_dir}/#{dir}"
-          images = Dir.entries("#{root_dir}/#{dir}")
-          images.delete(".")
-          images.delete("..")
-          category = {:tag => dir, :images => []}
-          images.each do |image|
-            if File.file? "#{root_dir}/#{dir}/#{image}"
-              if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
-                category[:images].push(image)
-              end
-            end
-          end
-          image_collection.push(category)
-        end
-      end
-
-      @variables = OpenStruct.new(title: config["title"],
-                                  root_folder: root_dir,
-                                  site: config["site"],
-                                  host_link: config["host_link"],
-                                  host_display_text: config["host_display_text"],
-                                  resource_prefix: "",
-                                  image_collection: image_collection
-                                 )
-      i18n(config["language"]).each {|key, value| @variables.send("#{key.to_s}=".to_sym, value) }
+      image_collection = collect_images
+      @variables.image_collection = image_collection
 
       @variables.resource_prefix = "../../"
       update_partials
@@ -79,7 +49,7 @@ module PowerBuild
         puts "Created: ".green + "#{dir}/index.html"
         category[:images].each do |image|
           @variables.current_image = "#{dir}/#{image}"
-          @variables.current_image_source = "../../#{root_dir}/#{category[:tag]}/#{image}"
+          @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
           @variables.current_title = image
           @variables.title = @variables.current_title
           content = File.read(File.expand_path("#{@base}/templates/show.html.erb", __FILE__))
@@ -89,7 +59,7 @@ module PowerBuild
         end
       end
 
-      @variables.title = config["title"]
+      @variables.title = @config["title"]
       @variables.resource_prefix = ""
       update_partials
       render_page("index")
@@ -122,35 +92,73 @@ module PowerBuild
     end
 
   private
-    def self.copy_assets_dir(dir_name)
+
+    def variables_set
+      @config = read_config
+      @variables = OpenStruct.new(title: @config["title"],
+                                  root_folder: @config["root_folder"],
+                                  site: @config["site"],
+                                  host_link: @config["host_link"],
+                                  host_display_text: @config["host_display_text"],
+                                  resource_prefix: ""
+                                 )
+      i18n(@config["language"]).each {|key, value| @variables.send("#{key.to_s}=".to_sym, value) }
+    end
+
+    def copy_assets_dir(dir_name)
       dir = File.expand_path("#{@base}/#{dir_name}", __FILE__)
       Dir.mkdir "assets" unless File.directory? "assets"
       FileUtils.copy_entry dir, "assets/#{dir_name}"
     end
 
-    def self.read_config
+    def read_config
       JSON.parse(File.read("power-build.config"))
     end
 
-    def self.update_partials
+    def update_partials
       add_partial("head")
       add_partial("navbar")
       add_partial("footer")
     end
 
-    def self.add_partial(partial)
+    def add_partial(partial)
       content = File.read(File.expand_path("#{@base}/partials/_#{partial}.html.erb", __FILE__))
       rendered = ERB.new(content).result(@variables.instance_eval{binding})
       @variables.send("#{partial}=".to_sym, rendered)
     end
 
-    def self.render_page(page)
+    def render_page(page)
       content = File.read(File.expand_path("#{@base}/templates/#{page}.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{page}.html", "w") {|file| file.write(erb)}
     end
 
-    def self.i18n(setting)
+    def collect_images
+      collection = []
+      root_dir = @config["root_folder"]
+      dirs = Dir.entries(root_dir)
+      dirs.delete(".")
+      dirs.delete("..")
+      dirs.each do |dir|
+        if File.directory? "#{root_dir}/#{dir}"
+          images = Dir.entries("#{root_dir}/#{dir}")
+          images.delete(".")
+          images.delete("..")
+          category = {:tag => dir, :images => []}
+          images.each do |image|
+            if File.file? "#{root_dir}/#{dir}/#{image}"
+              if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
+                category[:images].push(image)
+              end
+            end
+          end
+          collection.push(category)
+        end
+      end
+      return collection
+    end
+
+    def i18n(setting)
       case setting
       when "zh-tw"
         {
