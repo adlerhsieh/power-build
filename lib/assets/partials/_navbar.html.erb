@@ -7,12 +7,18 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/"><%= title %></a>
+    <a class="navbar-brand" href="<%= resource_prefix %>index.html"><%= title %></a>
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
       <li>
       <a href="<%= host_link %>"><%= host_display_text %></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Categories<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Inbox</a></li>
+        </ul>
       </li>
     </ul>
   </div>

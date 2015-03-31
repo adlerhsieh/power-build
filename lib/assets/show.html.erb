@@ -8,6 +8,10 @@
         <div class="col-lg-12">
           <h1 class="page-header"><%= title %></h1>
           <img class="image-responsive single-image" src="<%= current_image_source %>" alt="">
+          <div class="text-center">
+            <a class="btn btn-lg btn-primary download" href="<%= current_image_source %>" download="filename.jpg" title="image">Download</a>
+            <a class="btn btn-lg btn-default home" href="<%= resource_prefix %>index.html">Home</a>
+          </div>
         </div>
       </div>
       <hr>

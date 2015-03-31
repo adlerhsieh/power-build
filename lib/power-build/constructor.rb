@@ -11,7 +11,7 @@ module PowerBuild
       if File.file? "power-build.config"
         puts "Config file already exists. Either:"
         puts "1. Run 'power build' to build."
-        puts "2. Run 'power clean' to delete the config file."
+        puts "2. Run 'power delete' to delete all."
       else
         @base = "../../assets"
         config = "power-build.config"
@@ -64,15 +64,12 @@ module PowerBuild
                                   resource_prefix: "",
                                   image_collection: image_collection
                                  )
-      add_partial("head")
-      add_partial("navbar")
-      add_partial("footer")
-
+      update_partials
       render_page("index")
       puts "Created: ".green + "index.html"
 
       @variables.resource_prefix = "../../"
-      add_partial("head")
+      update_partials
       image_collection.each do |category|
         dir = FileUtils.mkdir_p("collection/#{category[:tag]}").first
         category[:images].each do |image|
@@ -126,6 +123,12 @@ module PowerBuild
 
     def self.read_config
       JSON.parse(File.read("power-build.config"))
+    end
+
+    def self.update_partials
+      add_partial("head")
+      add_partial("navbar")
+      add_partial("footer")
     end
 
     def self.add_partial(partial)

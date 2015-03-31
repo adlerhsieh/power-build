@@ -20,3 +20,17 @@ img.img-responsive {
   width: 300px;
   height: 200px;
 }
+
+img.image-responsive.single-image {
+  max-width: 1140px;
+  display: block;
+  margin: 0 auto;
+}
+
+.download, .home {
+  margin-top: 30px;
+}
+
+.home {
+  margin-left: 20px;
+}
