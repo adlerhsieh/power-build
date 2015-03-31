@@ -59,6 +59,8 @@ module PowerBuild
       @variables = OpenStruct.new(title: config["title"],
                                   root_folder: root_dir,
                                   site: config["site"],
+                                  host_link: config["host_link"],
+                                  host_display_text: config["host_display_text"],
                                   resource_prefix: "",
                                   image_collection: image_collection
                                  )
@@ -93,6 +95,18 @@ module PowerBuild
       else
         puts "Config file does not exist."
       end
+      if File.directory? "assets"
+        FileUtils.rm_rf "assets"
+        puts "Removed:".red + " /assets"
+      end
+      if File.file? "index.html"
+        FileUtils.remove "index.html"
+        puts "Removed:".red + " index.html"
+      end
+      if File.directory? "collection"
+        FileUtils.rm_rf "collection"
+        puts "Removed:".red + " /collection"
+      end
     end
 
     def self.open_config
@@ -106,7 +120,8 @@ module PowerBuild
   private
     def self.copy_assets_dir(dir_name)
       dir = File.expand_path("#{@base}/#{dir_name}", __FILE__)
-      FileUtils.copy_entry dir, dir_name
+      Dir.mkdir "assets" unless File.directory? "assets"
+      FileUtils.copy_entry dir, "assets/#{dir_name}"
     end
 
     def self.read_config
