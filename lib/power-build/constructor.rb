@@ -69,6 +69,11 @@ module PowerBuild
       update_partials
       image_collection.each do |category|
         dir = FileUtils.mkdir_p("collection/#{category[:tag]}").first
+        @variables.current_category = category
+        content = File.read(File.expand_path("#{@base}/category.html.erb", __FILE__))
+        erb = ERB.new(content).result(@variables.instance_eval{binding})
+        File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
+        puts "Created: ".green + "#{dir}/index.html"
         category[:images].each do |image|
           @variables.current_image = "#{dir}/#{image}"
           @variables.current_image_source = "../../#{root_dir}/#{category[:tag]}/#{image}"
