@@ -9,10 +9,11 @@
           <h1 class="page-header"><%= i_header %></h1>
         </div>
         <% image_collection.each do |category| %>
+          <% bridge = category[:tag] == i_uncategorized ? "" : "/#{category[:tag]}" %>
           <% category[:images].each do |image| %>
             <div class="col-lg-3 col-md-4 col-xs-6 thumb">
               <a class="thumbnail" href="<%= "assets/#{category[:tag]}/#{image}.html" %>">
-                <img class="img-responsive" src='<%= "#{root_folder}/#{category[:tag]}/#{image}" %>' alt="">
+                <img class="img-responsive" src='<%= "#{root_folder}#{bridge}/#{image}" %>' alt="">
               </a>
             </div>
           <% end %>

@@ -1,6 +1,7 @@
 require 'thor'
 require 'colorize'
 require 'power-build/constructor'
+require 'power-build/github_manager'
 
 module PowerBuild
   class Base < Thor
@@ -44,6 +45,12 @@ module PowerBuild
     def __print_version
       puts PowerBuild::VERSION
     end
+
+    # desc "push, p", "Push to GitHub"
+    # map %w[push, p] => :push
+    # def push
+    #   GitHubManager.new.checkout_branch
+    # end
 
     private
       def in_power_build_project
