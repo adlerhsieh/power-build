@@ -18,21 +18,5 @@
       <hr>
       <%= footer %>
     </div>
-    <script>
-      $(document).ready(function(){
-        var host = window.location.origin;
-        var index = window.location.pathname.indexOf("/assets");
-        var pathname = window.location.pathname.substring(0,index);
-        var path_prefix = host + pathname + "/";
-        var resource = "<%= current_image_source %>";
-        var resource_path = resource.substring(6,200);
-        var image_link = path_prefix + resource_path;
-        $("#copy").zclip({
-          path: "https://cdnjs.cloudflare.com/ajax/libs/zclip/1.1.2/ZeroClipboard.swf",
-          copy: image_link,
-          afterCopy: function(){console.log("text copied!");}
-        });
-      });
-    </script>
   </body>
 </html>
