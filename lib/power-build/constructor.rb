@@ -1,3 +1,4 @@
+require 'power-build/helper'
 require 'colorize'
 require 'erb'
 require 'ostruct'

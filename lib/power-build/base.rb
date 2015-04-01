@@ -2,7 +2,6 @@ require 'thor'
 require 'colorize'
 require 'power-build/constructor'
 require 'power-build/github_manager'
-require 'power-build/helper'
 
 module PowerBuild
   class Base < Thor
