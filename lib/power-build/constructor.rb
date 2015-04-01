@@ -187,6 +187,7 @@ module PowerBuild
     def create_page_by(category)
       @dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
       @variables.current_category = category
+      @variables.bridge = category[:tag] == @variables[:i_uncategorized] ? "" : "/#{category[:tag]}"
       content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{@dir}/index.html", "w") {|file| file.write(erb)}
