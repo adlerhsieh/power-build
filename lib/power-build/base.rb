@@ -2,6 +2,7 @@ require 'thor'
 require 'colorize'
 require 'power-build/constructor'
 require 'power-build/github_manager'
+require 'power-build/helper'
 
 module PowerBuild
   class Base < Thor
@@ -19,6 +20,7 @@ module PowerBuild
     desc "init, i", "Start with a config file."
     map %w[i] => :init
     def init
+      config_already_exists?
       in_power_build_project?
       Constructor.new.build_config
     end
@@ -63,6 +65,15 @@ module PowerBuild
       def config_exists?
         unless File.file? "power-build.config"
           puts "No config file found. Run 'power init' first."
+          abort
+        end
+      end
+
+      def config_already_exists?
+        if File.file? "power-build.config"
+          puts "Config file already exists. Either:"
+          puts "1. Run 'power build' to build."
+          puts "2. Run 'power delete' to delete all."
           abort
         end
       end

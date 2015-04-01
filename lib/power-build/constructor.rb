@@ -12,16 +12,10 @@ module PowerBuild
     end
 
     def build_config
-      if File.file? "power-build.config"
-        puts "Config file already exists. Either:"
-        puts "1. Run 'power build' to build."
-        puts "2. Run 'power delete' to delete all."
-      else
-        @assets_base = "../../assets"
-        config = "power-build.config"
-        FileUtils.cp File.expand_path("#{@assets_base}/power-build.config", __FILE__), config
-        puts "Created: ".green + "power-build.config"
-      end
+      @assets_base = "../../assets"
+      config = "power-build.config"
+      FileUtils.cp File.expand_path("#{@assets_base}/power-build.config", __FILE__), config
+      puts "Created: ".green + "power-build.config"
     end
 
     def copy_assets
@@ -152,32 +146,23 @@ module PowerBuild
     def collect_images
       collection = []
       root_dir = @config["root_folder"]
-      dirs = Dir.entries(root_dir)
-      dirs.delete(".")
-      dirs.delete("..")
+      dirs = Dir.entries(root_dir).delete_folder_extra
       dirs.each do |dir|
         if File.directory? "#{root_dir}/#{dir}"
-          images = Dir.entries("#{root_dir}/#{dir}")
-          images.delete(".")
-          images.delete("..")
+          images = Dir.entries("#{root_dir}/#{dir}").delete_folder_extra
           category = {:tag => dir, :images => []}
           images.each do |image|
-            if File.file? "#{root_dir}/#{dir}/#{image}"
-              if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
-                category[:images].push(image)
-              end
+            if File.file?("#{root_dir}/#{dir}/#{image}")
+              category[:images].push(image) if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
             end
           end
           collection.push(category)
         end
       end
-
       uncategorized = {:tag => @variables[:i_uncategorized], :images => []}
       dirs.each do |image|
         if File.file?("#{root_dir}/#{image}") && image.include?(".")
-          if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
-            uncategorized[:images].push(image)
-          end
+          uncategorized[:images].push(image) if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
         end
       end
       collection.push(uncategorized) if uncategorized[:images].length > 0
