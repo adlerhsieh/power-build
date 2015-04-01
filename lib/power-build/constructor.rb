@@ -46,7 +46,7 @@ module PowerBuild
       @variables.title = @config["title"]
       @variables.resource_prefix = ""
       update_partials
-      render_page("index")
+      render_("index")
       puts "Created: ".green + "index.html"
     end
 
@@ -54,8 +54,6 @@ module PowerBuild
       if File.file? "power-build.config"
         FileUtils.remove "power-build.config"
         puts "Removed:".red + " power-build.config"
-      else
-        puts "Config file does not exist."
       end
       if File.directory? "assets"
         FileUtils.rm_rf "assets"
@@ -64,14 +62,6 @@ module PowerBuild
       if File.file? "index.html"
         FileUtils.remove "index.html"
         puts "Removed:".red + " index.html"
-      end
-    end
-
-    def open_config
-      if File.file? "power-build.config"
-        %x[open power-build.config]
-      else
-        puts "Config file does not exist."
       end
     end
 
@@ -153,7 +143,11 @@ module PowerBuild
     def variables_set_by(category)
       @dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
       @variables.current_category = category
-      @variables.bridge = category[:tag] == @variables[:i_uncategorized] ? "" : "/#{category[:tag]}"
+      if category[:tag] == @variables[:i_uncategorized] 
+        @variables.bridge = ""
+      else
+        @variables.bridge = "/#{category[:tag]}"
+      end
     end
 
     def variables_set_by_each(category, image)
@@ -180,10 +174,10 @@ module PowerBuild
       puts "Created: ".green + "#{@dir}/#{@variables.current_title}.html"
     end
 
-    def render_page(page)
-      content = File.read(File.expand_path("#{@assets_base}/templates/#{page}.html.erb", __FILE__))
+    def render_(index)
+      content = File.read(File.expand_path("#{@assets_base}/templates/index.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
-      File.open("#{page}.html", "w") {|file| file.write(erb)}
+      File.open("index.html", "w") {|file| file.write(erb)}
     end
 
   end

@@ -30,12 +30,6 @@ module PowerBuild
       Constructor.new.remove_config
     end
 
-    desc "config, open, o", "Open the config file for you if you're this lazy"
-    map %w[open, o] => :config
-    def config
-      Constructor.new.open_config
-    end
-
     map %w[--version -v] => :__print_version
     desc "--version, -v", "show version"
     def __print_version
