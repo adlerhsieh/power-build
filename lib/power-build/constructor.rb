@@ -123,12 +123,6 @@ module PowerBuild
       @variables.send("#{partial}=".to_sym, rendered)
     end
 
-    def render_page(page)
-      content = File.read(File.expand_path("#{@assets_base}/templates/#{page}.html.erb", __FILE__))
-      erb = ERB.new(content).result(@variables.instance_eval{binding})
-      File.open("#{page}.html", "w") {|file| file.write(erb)}
-    end
-
     def collect_images
       collection = []
       root_dir = @config["root_folder"]
@@ -156,10 +150,22 @@ module PowerBuild
       return collection
     end
 
-    def create_page_by(category)
+    def variables_set_by(category)
       @dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
       @variables.current_category = category
       @variables.bridge = category[:tag] == @variables[:i_uncategorized] ? "" : "/#{category[:tag]}"
+    end
+
+    def variables_set_by_each(category, image)
+      @variables.current_image = "#{@dir}/#{image}"
+      bridge = category[:tag] == @variables[:i_uncategorized] ? "" : "/#{category[:tag]}"
+      @variables.current_image_source = "../../#{@config["root_folder"]}#{bridge}/#{image}"
+      @variables.current_title = image
+      @variables.title = @variables.current_title
+    end
+
+    def create_page_by(category)
+      variables_set_by(category)
       content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{@dir}/index.html", "w") {|file| file.write(erb)}
@@ -167,18 +173,18 @@ module PowerBuild
     end
 
     def create_page_by_each(category, image)
-      @variables.current_image = "#{@dir}/#{image}"
-      if category[:tag] == @variables[:i_uncategorized]
-        @variables.current_image_source = "../../#{@config["root_folder"]}/#{image}"
-      else
-        @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
-      end
-      @variables.current_title = image
-      @variables.title = @variables.current_title
+      variables_set_by_each(category, image)
       content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
       erb = ERB.new(content).result(@variables.instance_eval{binding})
       File.open("#{@dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
       puts "Created: ".green + "#{@dir}/#{@variables.current_title}.html"
     end
+
+    def render_page(page)
+      content = File.read(File.expand_path("#{@assets_base}/templates/#{page}.html.erb", __FILE__))
+      erb = ERB.new(content).result(@variables.instance_eval{binding})
+      File.open("#{page}.html", "w") {|file| file.write(erb)}
+    end
+
   end
 end
