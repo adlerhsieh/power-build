@@ -3,6 +3,7 @@ require 'erb'
 require 'ostruct'
 require 'json'
 require 'power-build/helper'
+require 'power-build/i18n'
 
 module PowerBuild
   class Constructor
