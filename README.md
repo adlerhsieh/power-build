@@ -4,7 +4,7 @@
 
 Power Build is a photo album builder which generates a site based on the images in a project. It works from command line.
 
-#### [Demo Site](http://cstony0917.github.io/warofpic/)
+#### [Demo Site](https://github.com/nkj20932/image_stack/tree/gh-pages)
 
 ## Requirement
 
@@ -130,7 +130,7 @@ my_album/
 
 `brother.jpg` will be labelled as "family", while `James Bond.jpg` and `Samuel Jacson.png` will be labelled as "Uncategorized".
 
-Only this structure followed can the site be generated in the correct format as in the [demo](http://cstony0917.github.io/warofpic/).
+Only this structure followed can the site be generated in the correct format as in the [demo](https://github.com/nkj20932/image_stack/tree/gh-pages).
 
 ## Deployment
 
