@@ -89,7 +89,8 @@ module PowerBuild
                                   site: @config["site"],
                                   host_link: @config["host_link"],
                                   host_display_text: @config["host_display_text"],
-                                  resource_prefix: ""
+                                  resource_prefix: "",
+                                  copyright_display: @config["Copyright Display"]
                                  )
       i18n(@config["language"]).each {|key, value| @variables.send("#{key.to_s}=".to_sym, value) }
     end
