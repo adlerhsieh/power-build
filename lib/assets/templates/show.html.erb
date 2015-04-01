@@ -9,7 +9,8 @@
           <h1 class="page-header"><a href="../../index.html"><%= i_header %></a> > <a href="index.html"><%= current_category[:tag] %></a> > <%= title %></h1>
           <img class="image-responsive single-image" src="<%= current_image_source %>" alt="">
           <div class="text-center">
-            <a class="btn btn-lg btn-primary download" href="<%= current_image_source %>" download="<%= title %>" title="image"><%= i_download %></a>
+            <a class="btn btn-lg btn-success download click-copy" href="<%= current_image_source %>" download="<%= title %>" ><%= i_download %></a>
+            <a class="btn btn-lg btn-primary download" href="<%= current_image_source %>" download="<%= title %>" ><%= i_download %></a>
             <a class="btn btn-lg btn-default home" href="<%= resource_prefix %>index.html"><%= i_home %></a>
           </div>
         </div>
@@ -20,6 +21,15 @@
     <script src="<%= resource_prefix %>assets/js/jquery.js"></script>
     <script src="<%= resource_prefix %>assets/js/bootstrap.min.js"></script>
     <script src="<%= resource_prefix %>assets/js/custom.js"></script>
+    <script src="<%= resource_prefix %>assets/js/jquery.zclip.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('.click-copy').zclip({
+          path: "<%= resource_prefix %>assets/js/ZeroClipboard.swf",
+          copy: "hello"
+        });
+      });
+    </script>
   </body>
   <!-- The credit of this design goes to David Miller -->
   <!-- Check more for detail: http://startbootstrap.com/template-overviews/thumbnail-gallery/ -->
