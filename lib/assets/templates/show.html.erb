@@ -24,9 +24,17 @@
     <script src="<%= resource_prefix %>assets/js/jquery.zclip.js"></script>
     <script>
       $(document).ready(function(){
+        var host = window.location.origin;
+        var index = window.location.pathname.indexOf("/assets");
+        var pathname = window.location.pathname.substring(0,index);
+        var path_prefix = host + pathname + "/";
+        var resource = "<%= current_image_source %>";
+        var resource_path = resource.substring(6,200);
+        var image_link = path_prefix + resource_path;
         $("#copy").zclip({
           path: "<%= resource_prefix %>assets/js/ZeroClipboard.swf",
-          copy: 'this is a book'
+          copy: image_link,
+          afterCopy: function(){console.log("text copied!");}
         });
       });
     </script>
