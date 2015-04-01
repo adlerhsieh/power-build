@@ -218,7 +218,8 @@ module PowerBuild
           i_copyright: "版權所有",
           i_download: "下載",
           i_home: "首頁",
-          i_uncategorized: "綜合"
+          i_uncategorized: "綜合",
+          i_copy: "複製圖片連結"
         }
       when "en"
         {
@@ -227,7 +228,8 @@ module PowerBuild
           i_copyright: "Copyright",
           i_download: "Download",
           i_home: "Home",
-          i_uncategorized: "Uncategorized"
+          i_uncategorized: "Uncategorized",
+          i_copy: "Copy"
         }
       end
     end
