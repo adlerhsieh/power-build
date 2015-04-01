@@ -42,21 +42,9 @@ module PowerBuild
       @variables.resource_prefix = "../../"
       update_partials
       image_collection.each do |category|
-        dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
-        @variables.current_category = category
-        content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
-        erb = ERB.new(content).result(@variables.instance_eval{binding})
-        File.open("#{dir}/index.html", "w") {|file| file.write(erb)}
-        puts "Created: ".green + "#{dir}/index.html"
+        create_page_by(category)
         category[:images].each do |image|
-          @variables.current_image = "#{dir}/#{image}"
-          @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
-          @variables.current_title = image
-          @variables.title = @variables.current_title
-          content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
-          erb = ERB.new(content).result(@variables.instance_eval{binding})
-          File.open("#{dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
-          puts "Created: ".green + "#{dir}/#{@variables.current_title}.html"
+          create_page_by_each(category, image)
         end
       end
 
@@ -183,6 +171,26 @@ module PowerBuild
         end
       end
       return collection
+    end
+
+    def create_page_by(category)
+      @dir = FileUtils.mkdir_p("assets/#{category[:tag]}").first
+      @variables.current_category = category
+      content = File.read(File.expand_path("#{@assets_base}/templates/category.html.erb", __FILE__))
+      erb = ERB.new(content).result(@variables.instance_eval{binding})
+      File.open("#{@dir}/index.html", "w") {|file| file.write(erb)}
+      puts "Created: ".green + "#{@dir}/index.html"
+    end
+
+    def create_page_by_each(category, image)
+      @variables.current_image = "#{@dir}/#{image}"
+      @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
+      @variables.current_title = image
+      @variables.title = @variables.current_title
+      content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
+      erb = ERB.new(content).result(@variables.instance_eval{binding})
+      File.open("#{@dir}/#{@variables.current_title}.html", "w") {|file| file.write(erb)}
+      puts "Created: ".green + "#{@dir}/#{@variables.current_title}.html"
     end
 
     def i18n(setting)
