@@ -38,3 +38,8 @@ img.image-responsive.single-image {
   color: #C2C2C2;
   margin-top: -25px;
 }
+
+.btn {
+  margin-left: 10px;
+  margin-right: 10px;
+}
