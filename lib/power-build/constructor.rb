@@ -170,6 +170,17 @@ module PowerBuild
           collection.push(category)
         end
       end
+
+      uncategorized = {:tag => @variables[:i_uncategorized], :images => []}
+      dirs.each do |image|
+        if File.file?("#{root_dir}/#{image}") && image.include?(".")
+          if ["jpg", "png", "gif", "peg"].include? image[-3..-1].downcase
+            uncategorized[:images].push(image)
+          end
+        end
+      end
+      collection.push(uncategorized) if uncategorized[:images].length > 0
+
       return collection
     end
 
@@ -184,7 +195,11 @@ module PowerBuild
 
     def create_page_by_each(category, image)
       @variables.current_image = "#{@dir}/#{image}"
-      @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
+      if category[:tag] == @variables[:i_uncategorized]
+        @variables.current_image_source = "../../#{@config["root_folder"]}/#{image}"
+      else
+        @variables.current_image_source = "../../#{@config["root_folder"]}/#{category[:tag]}/#{image}"
+      end
       @variables.current_title = image
       @variables.title = @variables.current_title
       content = File.read(File.expand_path("#{@assets_base}/templates/show.html.erb", __FILE__))
@@ -201,7 +216,8 @@ module PowerBuild
           i_category: "類別",
           i_copyright: "版權所有",
           i_download: "下載",
-          i_home: "首頁"
+          i_home: "首頁",
+          i_uncategorized: "綜合"
         }
       when "en"
         {
@@ -209,7 +225,8 @@ module PowerBuild
           i_category: "Categories",
           i_copyright: "Copyright",
           i_download: "Download",
-          i_home: "Home"
+          i_home: "Home",
+          i_uncategorized: "Uncategorized"
         }
       end
     end
