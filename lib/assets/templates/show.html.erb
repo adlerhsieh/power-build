@@ -18,10 +18,6 @@
       <hr>
       <%= footer %>
     </div>
-    <script src="<%= resource_prefix %>assets/js/jquery.js"></script>
-    <script src="<%= resource_prefix %>assets/js/bootstrap.min.js"></script>
-    <script src="<%= resource_prefix %>assets/js/custom.js"></script>
-    <script src="<%= resource_prefix %>assets/js/jquery.zclip.js"></script>
     <script>
       $(document).ready(function(){
         var host = window.location.origin;
@@ -32,13 +28,11 @@
         var resource_path = resource.substring(6,200);
         var image_link = path_prefix + resource_path;
         $("#copy").zclip({
-          path: "<%= resource_prefix %>assets/js/ZeroClipboard.swf",
+          path: "https://cdnjs.cloudflare.com/ajax/libs/zclip/1.1.2/ZeroClipboard.swf",
           copy: image_link,
           afterCopy: function(){console.log("text copied!");}
         });
       });
     </script>
   </body>
-  <!-- The credit of this design goes to David Miller -->
-  <!-- Check more for detail: http://startbootstrap.com/template-overviews/thumbnail-gallery/ -->
 </html>
