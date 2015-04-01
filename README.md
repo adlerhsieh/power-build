@@ -6,8 +6,9 @@ Power Build is a photo album builder which generates a site based on the images 
 
 ## Requirement
 
-1. Ruby is installed in your Mac or Linux. (Don't use this application in Windows. Nothing has been tested.)
-2. The generated site is to be hosted on [GitHub pages](https://pages.github.com/). This tool does not work on other sites.
+1. Ruby version 2.0 or higher
+2. Mac or Linux (Nothing has been tested on Windows.)
+3. This tool is for hosting on [GitHub pages](https://pages.github.com/). Other sites may not be compatible.
 
 ## Installation
 
@@ -33,7 +34,7 @@ It creates a config file in your project directory. You can adjust the content d
 $power build
 ```
 
-You can skip the `build` and just run `power`. This command generates a static site which allows you to host on github pages. Basically it creates a `index.html` and a folder `album` with other pages in it.
+You can skip the `build` and just run `power`. This command generates a static site which allows you to host on github pages. Basically it creates a `index.html` and a folder `assets` with other pages in it.
 
 ```
 $power delete
@@ -71,14 +72,14 @@ The config file looks like this:
 Before site generation, you need to include at least the folder of your images:
 
 ```
-My_repo_folder
+My_project_folder
 |-- image_root_folder
 ```
 
 If so, after site generation, your folder will look like this:
 
 ```
-My_repo_folder
+My_project_folder
 |-- image_root_folder
 |-- power-build.config
 |-- assets

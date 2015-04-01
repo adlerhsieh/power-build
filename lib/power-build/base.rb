@@ -4,7 +4,7 @@ require 'power-build/constructor'
 
 module PowerBuild
   class Base < Thor
-    desc "build, b", "Generates a static site. Old files will be overwritten."
+    desc "build, b", "Generates a static site. Existing files will be overwritten."
     map %w[b] => :build
     default_task :build
     def build 
@@ -17,13 +17,13 @@ module PowerBuild
       end
     end
 
-    desc "init, i", "Start with a config file. Continue with 'power build' if you have nothing to change."
+    desc "init, i", "Start with a config file."
     map %w[i] => :init
     def init
       unless in_power_build_project
         Constructor.new.build_config
       else
-        puts "You are already in a power-build project."
+        puts "Already in a power-build project."
       end
     end
 
