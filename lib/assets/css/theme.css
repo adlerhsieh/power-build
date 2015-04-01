@@ -53,7 +53,7 @@ img.image-responsive.single-image {
     font-size: 26px;
   }
 
-  img.img-responsive.single-image {
+  img.image-responsive.single-image {
     max-width: 100%;
   }
 }
