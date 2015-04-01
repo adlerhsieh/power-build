@@ -78,7 +78,7 @@ module PowerBuild
       end
 
       def image_root_folder_exists?
-        config = Constructor.new.read_config 
+        config = Helper.read_config 
         folder = config["root_folder"]
         unless File.directory? folder
           puts "Image folder '#{folder}' not found." 
