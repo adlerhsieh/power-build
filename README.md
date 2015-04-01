@@ -1,5 +1,7 @@
 # Power Build
 
+[![Gem Version](https://badge.fury.io/rb/power-build.svg)](http://badge.fury.io/rb/power-build) [![Code Climate](https://codeclimate.com/github/nkj20932/power-build/badges/gpa.svg)](https://codeclimate.com/github/nkj20932/power-build)
+
 Power Build is a photo album builder which generates a site based on the images in a project. It works from command line.
 
 #### [Demo Site](http://cstony0917.github.io/warofpic/)
