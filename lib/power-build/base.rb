@@ -36,11 +36,11 @@ module PowerBuild
       puts PowerBuild::VERSION
     end
 
-    # desc "push, p", "Push to GitHub"
-    # map %w[push, p] => :push
-    # def push
-    #   GitHubManager.new.checkout_branch
-    # end
+    desc "push, p", "Push to GitHub"
+    map %w[push, p] => :push
+    def push
+      # GitHubManager.new.checkout_branch
+    end
 
     private
       def in_power_build_project?
