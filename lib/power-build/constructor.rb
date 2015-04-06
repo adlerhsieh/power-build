@@ -5,7 +5,7 @@ require 'json'
 require 'power-build/helper'
 require 'power-build/i18n'
 
-module PowerBuild
+# module PowerBuild
   class Constructor
     def initialize(config=nil)
       @assets_base = "../../assets"
@@ -51,6 +51,7 @@ module PowerBuild
     end
 
     def remove_config
+      puts "remove config is executed".red
       if File.file? "power-build.config"
         FileUtils.remove "power-build.config"
         puts "Removed:".red + " power-build.config"
@@ -181,4 +182,4 @@ module PowerBuild
     end
 
   end
-end
+# end

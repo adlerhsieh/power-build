@@ -1,5 +1,6 @@
 # require_relative '../lib/power-build/base'
 require 'spec_helper'
+require 'ostruct'
 
 describe PowerBuild::Base do
   it '#push' do
@@ -16,6 +17,13 @@ describe PowerBuild::Base do
     expect(subject.__print_version).to be_falsy
   end
 
+  it '#delete' do
+    stub_const("PowerBuild::Constructor", 
+      OpenStruct.new(:new => 
+        OpenStruct.new(:remove_config => "remove_is_called")))
+    expect(subject.delete).to eq "remove_is_called"
+  end
+
   after(:each) do
     file = "power-build.config"
     if File.file? file
@@ -25,3 +33,4 @@ describe PowerBuild::Base do
   end
 
 end
+
